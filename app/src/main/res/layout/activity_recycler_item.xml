@@ -6,8 +6,9 @@
     android:layout_height="match_parent"
     tools:context="com.kl.tourstudy.activity.RecyclerItemActivity">
 
-    <ImageView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/item_image"
+        android:layout_above="@+id/button_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -20,8 +21,8 @@
         android:layout_height="wrap_content" />
 
     <Button
+        android:background="@color/colorPrimary"
         android:text="查看问题"
-        android:background="@drawable/button_shape"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/item_button1"

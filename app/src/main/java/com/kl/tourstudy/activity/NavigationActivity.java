@@ -42,29 +42,6 @@ public class NavigationActivity extends AppCompatActivity
     //保存Fragment标题
     private String[] title = {"推荐路线","朋友圈","聊天"};
 
-    /**
-     * ToolBar的选项菜单
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_tab, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_search:
-                Intent searchIntent = new Intent(NavigationActivity.this, SearchActivity.class);
-                startActivity(searchIntent);
-                break;
-            default:
-                break;
-        }
-
-        return true;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +100,34 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     /**
+     * ToolBar的选项菜单
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_tab, menu);
+        return true;
+    }
+
+    /**
+     * toolBar菜单选择监听
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_search:
+                Intent searchIntent = new Intent(NavigationActivity.this, SearchActivity.class);
+                startActivity(searchIntent);
+                break;
+            default:
+                break;
+        }
+
+        return true;
+    }
+
+    /**
      * 设置按下物理返回键后，侧滑菜单关闭
      */
     @Override
@@ -136,9 +141,6 @@ public class NavigationActivity extends AppCompatActivity
 
     /**
      * 获得从登录界面返回的用户名
-     * @param requestCode
-     * @param resultCode
-     * @param data
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -151,8 +153,6 @@ public class NavigationActivity extends AppCompatActivity
 
     /**
      * 侧边栏menu点击
-     * @param item
-     * @return
      */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -164,16 +164,17 @@ public class NavigationActivity extends AppCompatActivity
                 SharedPreferences preferences = getSharedPreferences("user_info", MODE_PRIVATE);
                 int status = preferences.getInt("LOG_STATUS", 0);
                 //根据用户的登录状态值判断是跳转到登录界面，还是跳转到个人信息界面
-                if (status == 0){
-                    Intent intent = new Intent(NavigationActivity.this, LoginActivity.class);
-                    startActivityForResult(intent, 1);
-                } else if (status == 1){
+//                if (status == 0){
+//                    Intent intent = new Intent(NavigationActivity.this, LoginActivity.class);
+//                    startActivityForResult(intent, 1);
+//                } else if (status == 1){
                     Intent intent = new Intent(NavigationActivity.this, UserInfoActivity.class);
                     startActivity(intent);
-                }
+//                }
                 break;
             case R.id.nav_setting:
-
+                Intent intent2 = new Intent(NavigationActivity.this, NoteSettingsActivity.class);
+                startActivity(intent2);
                 break;
             default:
                 break;

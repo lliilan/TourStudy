@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/answer_info_item"
             android:layout_marginTop="5dp"
-            android:text="菲菲姐奥斯卡喝咖啡荒废了减肥了空间诶佛健康减肥了骄傲了飞机客服粉身碎骨色后突然回头然后让他进入他居然居然居然"/>
+            android:text="回答问题测试"/>
 
         <LinearLayout
             android:layout_width="match_parent"

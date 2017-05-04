@@ -3,7 +3,6 @@ package com.kl.tourstudy.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,10 +18,12 @@ import com.google.gson.Gson;
 import com.kl.tourstudy.R;
 import com.kl.tourstudy.activity.RecyclerItemActivity;
 import com.kl.tourstudy.gsonbean.TourInfo;
-import com.kl.tourstudy.tools.MyItemClickListener;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.IOException;
+
+import okhttp3.Call;
 
 import static com.kl.tourstudy.util.PreferenceUtil.IP;
 import static com.kl.tourstudy.util.PreferenceUtil.PROJECT;
@@ -36,6 +37,7 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
 
     private static final String TAG = "TourAdapter";
     private Context mContext;
+    private int sum;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -58,8 +60,8 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
         }
     }
 
-    public TourAdapter(){
-
+    public TourAdapter(String response){
+        sum = Integer.parseInt(response);
     }
 
     @Override
@@ -79,43 +81,7 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-//        int sum = 3;
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                String data = "";   //储存返回的JSON数据
-//                String servlet = "QueryTourSumServlet";
-//                String url = IP + PROJECT + servlet;
-//
-//                try {
-//                    int sum = Integer.parseInt(
-//                            OkHttpUtils.get()
-//                                    .url(url)
-//                                    .build()
-//                                    .execute().body().string());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
-//        QueryTourIdThread threads = new QueryTourIdThread();
-//        threads.start();
-////        handler = new Handler(new Handler.Callback() {
-////            @Override
-////            public boolean handleMessage(Message msg) {
-////                return false;
-////            }
-////        }){
-////            @Override
-////            public void handleMessage(Message msg) {
-////                super.handleMessage(msg);
-////                msg.getData().get("sum");
-////
-////            }
-////        };
-//        Bundle bundle = new Bundle();
-//        count = bundle.getInt("sum");
-        return 9;
+        return sum;
     }
 
     private class LoadTask extends AsyncTask<Integer, Void, TourInfo>{
@@ -139,6 +105,7 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
                         .addParams("id", params[0] + "")
                         .build()
                         .execute().body().string();
+//                Log.e(TAG, "doInBackground: " + info );
                 Gson gson = new Gson();
                 //解析JSON数据
                 tourInfo = gson.fromJson(info, TourInfo.class);
@@ -155,7 +122,6 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
             if (tourInfo != null) {
                 String name = tourInfo.getName();
                 String image = IP + tourInfo.getImage();
-
 
                 tourText.setText(name);
                 Glide.with(mContext).load(image).into(tourImage);

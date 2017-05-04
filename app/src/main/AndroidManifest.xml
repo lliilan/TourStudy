@@ -33,15 +33,18 @@
         <activity android:name=".activity.RecyclerItemActivity" />
         <activity android:name=".activity.TourBookActivity" />
         <activity android:name=".activity.BookInfoActivity" />
-        <activity android:name=".activity.SearchActivity"
-            android:windowSoftInputMode="stateVisible"/>
+        <activity
+            android:name=".activity.SearchActivity"
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".activity.UserInfoActivity"
-            android:label="@string/title_activity_user_info"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".activity.QuestionListActivity"/>
-        <activity android:name=".activity.AskQuestionActivity"/>
-        <activity android:name=".activity.QuestionInfoActivity"/>
+            android:label="@string/title_activity_user_info" />
+        <activity android:name=".activity.QuestionListActivity" />
+        <activity android:name=".activity.AskQuestionActivity" />
+        <activity android:name=".activity.QuestionInfoActivity" />
+        <activity
+            android:name=".activity.NoteSettingsActivity"
+            android:label="@string/title_activity_note_settings"></activity>
     </application>
 
 </manifest>

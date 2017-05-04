@@ -64,6 +64,7 @@ public class QuestionListActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.questionlist_layout);
+
         initValue();
         askQuestion= (Button) findViewById(R.id.ask_question_button);
         askQuestion.setOnClickListener(this);

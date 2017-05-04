@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,17 +16,22 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.kl.tourstudy.R;
+import com.kl.tourstudy.adapter.TourInfoAdapter;
 import com.kl.tourstudy.gsonbean.TourInfo;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static com.kl.tourstudy.util.PreferenceUtil.IP;
 import static com.kl.tourstudy.util.PreferenceUtil.PROJECT;
 
 public class RecyclerItemActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageView image;
+//    private ImageView image;
+    private RecyclerView image;
     private int position = 1;
     private Button buttonBook,buttonQuestion;
     private Intent intent;
@@ -42,7 +50,7 @@ public class RecyclerItemActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void initView() {
-        image = (ImageView) findViewById(R.id.item_image);
+        image = (RecyclerView) findViewById(R.id.item_image);
         buttonBook = (Button) findViewById(R.id.item_button1);
         buttonQuestion = (Button) findViewById(R.id.button_question);
         buttonBook.setOnClickListener(this);
@@ -76,9 +84,9 @@ public class RecyclerItemActivity extends AppCompatActivity implements View.OnCl
 
     private class ImageTask extends AsyncTask<Integer, Void, TourInfo>{
 
-        private ImageView image;
+        private RecyclerView image;
 
-        ImageTask(ImageView image){
+        ImageTask(RecyclerView image){
               this.image = image;
         }
 
@@ -105,9 +113,10 @@ public class RecyclerItemActivity extends AppCompatActivity implements View.OnCl
         @Override
         protected void onPostExecute(TourInfo tourInfo) {
             super.onPostExecute(tourInfo);
-            String url = IP + tourInfo.getPicInfo();
-            Glide.with(RecyclerItemActivity.this).load(url).into(image);
-
+            String[] picUrl = tourInfo.getPicInfo().split(";");GridLayoutManager layoutManager = new GridLayoutManager(RecyclerItemActivity.this, 1);
+            image.setLayoutManager(layoutManager);
+            TourInfoAdapter tourInfoAdapter = new TourInfoAdapter(picUrl, RecyclerItemActivity.this);
+            image.setAdapter(tourInfoAdapter);
         }
     }
 
