@@ -22,7 +22,7 @@ import static com.kl.tourstudy.util.PreferenceUtil.IP;
 import static com.kl.tourstudy.util.PreferenceUtil.PROJECT;
 
 /**
- * 主页面Fragment
+ * 主页面Fragment-游学路线
  * Created by KL on 2017/4/12 0012.
  */
 
@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
 
     private void initView(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_home);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(layoutManager);
         getTourSum();
     }

@@ -11,7 +11,7 @@
     tools:context="com.kl.tourstudy.activity.BookInfoActivity">
 
     <TextView
-        android:text="这里将显示刚刚的游学预定信息"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </RelativeLayout>

@@ -2,9 +2,13 @@ package com.kl.tourstudy.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +23,8 @@ import com.kl.tourstudy.R;
 import com.kl.tourstudy.activity.RecyclerItemActivity;
 import com.kl.tourstudy.gsonbean.TourInfo;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.IOException;
-
-import okhttp3.Call;
 
 import static com.kl.tourstudy.util.PreferenceUtil.IP;
 import static com.kl.tourstudy.util.PreferenceUtil.PROJECT;
@@ -42,13 +43,18 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         ImageView tourImg;
-        TextView tourText;
+        TextView tourTitle;
+        TextView tourPrice,tourDate,tourDay;
 
         ViewHolder(final View itemView, final Context context) {
             super(itemView);
             cardView = (CardView) itemView;
             tourImg = (ImageView) itemView.findViewById(R.id.tour_img);
-            tourText = (TextView) itemView.findViewById(R.id.tour_text);
+            tourTitle = (TextView) itemView.findViewById(R.id.tour_title);
+            tourPrice = (TextView) itemView.findViewById(R.id.tour_price);
+            tourDate = (TextView) itemView.findViewById(R.id.tour_date);
+            tourDay = (TextView) itemView.findViewById(R.id.tour_day);
+
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -75,7 +81,7 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        LoadTask task = new LoadTask(holder.tourText, holder.tourImg);
+        LoadTask task = new LoadTask(holder.tourTitle, holder.tourImg, holder.tourPrice, holder.tourDate, holder.tourDay);
         task.execute(position);
     }
 
@@ -86,12 +92,16 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
 
     private class LoadTask extends AsyncTask<Integer, Void, TourInfo>{
 
-        private TextView tourText;
+        private TextView tourTitle;
         private ImageView tourImage;
+        private TextView tourPrice,tourDate,tourDay;
 
-        LoadTask(TextView tourText, ImageView tourImg) {
-            this.tourText = tourText;
+        LoadTask(TextView tourTitle, ImageView tourImg, TextView tourPrice, TextView tourDate, TextView tourDay) {
+            this.tourTitle = tourTitle;
             this.tourImage = tourImg;
+            this.tourPrice = tourPrice;
+            this.tourDate = tourDate;
+            this.tourDay = tourDay;
         }
 
         @Override
@@ -122,9 +132,32 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
             if (tourInfo != null) {
                 String name = tourInfo.getName();
                 String image = IP + tourInfo.getImage();
+                String price = tourInfo.getPrice() + "";
 
-                tourText.setText(name);
+                //对游学信息中的具体价格字符进行颜色改变
+                String priceStr = "￥" + tourInfo.getPrice() + "/人";
+                int colorPriceStart = priceStr.indexOf("￥") + 1;    //获得价格在其所处字符串的index
+                int colorPriceEnd = colorPriceStart + price.length();   //获得价格在其字符串的结束index
+                //以下语句设置价格所在字符串位置的前景色，即价格的颜色
+                SpannableStringBuilder stylePrice = new SpannableStringBuilder(priceStr);
+                stylePrice.setSpan(new ForegroundColorSpan(Color.parseColor("#FFFF33")),
+                        colorPriceStart, colorPriceEnd, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+
+                String date = tourInfo.getEndSignDate();
+                String day = tourInfo.getDay();
+                String dayStr = "为期" + day + "游学";
+                int colorDayStart = dayStr.indexOf("期") + 1;
+                int colorDayEnd = colorPriceStart + day.length() + 1;
+                SpannableStringBuilder styleDay = new SpannableStringBuilder(dayStr);
+                styleDay.setSpan(new ForegroundColorSpan(Color.parseColor("#F79700")),
+                        colorDayStart, colorDayEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+                tourTitle.setText(name);
                 Glide.with(mContext).load(image).into(tourImage);
+                Log.e(TAG, "onPostExecute: " + image );
+                tourPrice.setText(stylePrice);
+                tourDate.setText("截至报名日期:" + date);
+                tourDay.setText(styleDay);
             }
         }
     }

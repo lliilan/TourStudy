@@ -31,7 +31,6 @@ public class TourInfoAdapter extends RecyclerView.Adapter<TourInfoAdapter.ViewHo
 
         ViewHolder(final View itemView) {
             super(itemView);
-            Log.e(TAG, "ViewHolder: do" );
             cardView = (CardView) itemView;
             tourImg = (ImageView) itemView.findViewById(R.id.image);
 

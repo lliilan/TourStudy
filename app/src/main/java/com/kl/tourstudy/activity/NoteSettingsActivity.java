@@ -39,7 +39,6 @@ public class NoteSettingsActivity extends AppCompatPreferenceActivity {
                 ListPreference listPreference = (ListPreference) preference;
                 int index = listPreference.findIndexOfValue(stringValue);
 
-
                 // Set the summary to reflect the new value.
                 preference.setSummary(
                         index >= 0

@@ -9,6 +9,9 @@ public class TourInfo {
     private int id;
     private String name;
     private String image;
+    private int price;
+    private String endSignDate;
+    private String day;
     private String picInfo;
 
     public int getId() {
@@ -33,6 +36,30 @@ public class TourInfo {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public String getEndSignDate() {
+        return endSignDate;
+    }
+
+    public void setEndSignDate(String endSignDate) {
+        this.endSignDate = endSignDate;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 
     public String getPicInfo() {
