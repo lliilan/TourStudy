@@ -145,9 +145,9 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
 
                 String date = tourInfo.getEndSignDate();
                 String day = tourInfo.getDay();
-                String dayStr = "为期" + day + "游学";
+                String dayStr = "为期" + day + "天游学";
                 int colorDayStart = dayStr.indexOf("期") + 1;
-                int colorDayEnd = colorPriceStart + day.length() + 1;
+                int colorDayEnd = colorPriceStart + day.length() + 2;
                 SpannableStringBuilder styleDay = new SpannableStringBuilder(dayStr);
                 styleDay.setSpan(new ForegroundColorSpan(Color.parseColor("#F79700")),
                         colorDayStart, colorDayEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);

@@ -34,22 +34,25 @@ public class TourBookActivity extends AppCompatActivity {
         book.execute(userId,tourId,status);
     }
 
-    public class BookTask extends AsyncTask<Integer ,Void, String>{
+    public class BookTask extends AsyncTask<Integer ,Void, String[]>{
 
         @Override
-        protected String doInBackground(Integer... params) {
+        protected String[] doInBackground(Integer... params) {
             String servlet = "InsertTourBookServletApp";
             String url = IP + PROJECT + servlet;
-            String data = null;
+            String[] data = new String[3];
 
             try {
-                data = OkHttpUtils.post()
+                data[0] = OkHttpUtils.post()
                         .addParams("userId",params[0].toString())
                         .addParams("tourId",params[1].toString())
                         .addParams("status",params[2].toString())
                         .url(url)
                         .build()
                         .execute().body().string();
+                //下面两个参数用于显示之后的订单界面时使用
+                data[1] = params[1].toString();
+                data[2] = params[0].toString();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -57,15 +60,17 @@ public class TourBookActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(String[] s) {
             super.onPostExecute(s);
             Gson gson = new Gson();
-            BooleanReturn booleanReturn = gson.fromJson(s, BooleanReturn.class);
-            Log.e(TAG, "onPostExecute: " + s);
+
+            BooleanReturn booleanReturn = gson.fromJson(s[0], BooleanReturn.class);
             boolean flag = booleanReturn.isFlag();
             if (flag){
                 Toast.makeText(TourBookActivity.this, "预定成功", Toast.LENGTH_SHORT).show();
                 Intent intentBook = new Intent(TourBookActivity.this,BookInfoActivity.class);
+                intentBook.putExtra("tourId",s[1]);
+                intentBook.putExtra("userId",s[2]);
                 startActivity(intentBook);
                 finish();
             } else {
