@@ -17,6 +17,9 @@ import java.io.IOException;
 import static com.kl.tourstudy.util.PreferenceUtil.IP;
 import static com.kl.tourstudy.util.PreferenceUtil.PROJECT;
 
+/**
+ * 进行预定
+ */
 public class TourBookActivity extends AppCompatActivity {
 
     private static final String TAG = "TourBookActivity";
@@ -28,7 +31,6 @@ public class TourBookActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int userId = intent.getIntExtra("userId", 0);
         int tourId = intent.getIntExtra("tourId", 0) + 1;   //listview中的item不是以1开始，需要加1
-        Log.e(TAG, "onCreate: " + tourId );
         int status = 1;
         BookTask book = new BookTask();
         book.execute(userId,tourId,status);
@@ -69,8 +71,8 @@ public class TourBookActivity extends AppCompatActivity {
             if (flag){
                 Toast.makeText(TourBookActivity.this, "预定成功", Toast.LENGTH_SHORT).show();
                 Intent intentBook = new Intent(TourBookActivity.this,BookInfoActivity.class);
-                intentBook.putExtra("tourId",s[1]);
-                intentBook.putExtra("userId",s[2]);
+                intentBook.putExtra("tourId",Integer.parseInt(s[1]));
+                intentBook.putExtra("userId",Integer.parseInt(s[2]));
                 startActivity(intentBook);
                 finish();
             } else {

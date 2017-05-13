@@ -30,7 +30,7 @@ import static com.kl.tourstudy.util.PreferenceUtil.IP;
 import static com.kl.tourstudy.util.PreferenceUtil.PROJECT;
 
 /**
- * 加载主页面ListView
+ * 加载主页面ListView的适配器
  * Created by KL on 2017/4/12 0012.
  */
 
@@ -60,6 +60,7 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, RecyclerItemActivity.class);
                     intent.putExtra("position", getAdapterPosition());
+                    Log.e(TAG, "onClick: position-Adapter:" + getAdapterPosition());
                     itemView.getContext().startActivity(intent);
                 }
             });

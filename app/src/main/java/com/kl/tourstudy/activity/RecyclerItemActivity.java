@@ -28,11 +28,14 @@ import java.util.Map;
 import static com.kl.tourstudy.util.PreferenceUtil.IP;
 import static com.kl.tourstudy.util.PreferenceUtil.PROJECT;
 
+/**
+ * 显示主界面中路线点击进去后的页面
+ */
 public class RecyclerItemActivity extends AppCompatActivity implements View.OnClickListener {
 
 //    private ImageView image;
     private RecyclerView image;
-    private int position = 1;
+    private int position = 0;
     private Button buttonBook,buttonQuestion;
     private Intent intent;
     private static final String TAG = "RecyclerItemActivity";
@@ -44,6 +47,7 @@ public class RecyclerItemActivity extends AppCompatActivity implements View.OnCl
         initView();
         intent = getIntent();
         position = intent.getIntExtra("position", 0);
+        Log.e(TAG, "onCreate: position = " + position );
         ImageTask imageTask = new ImageTask(image);
         imageTask.execute(position);
 
@@ -77,7 +81,6 @@ public class RecyclerItemActivity extends AppCompatActivity implements View.OnCl
                 Intent intent = new Intent(RecyclerItemActivity.this, QuestionListActivity.class);
                 intent.putExtra("tour_id",getIntent().getIntExtra("position", 0));
                 startActivity(intent);
-
                 break;
         }
     }
@@ -102,6 +105,7 @@ public class RecyclerItemActivity extends AppCompatActivity implements View.OnCl
                         .build()
                         .execute().body().string();
                 Gson gson = new Gson();
+                Log.e(TAG, "doInBackground: tourId = " + params[0] );
                 //解析JSON数据
                 tourInfo = gson.fromJson(info, TourInfo.class);
             } catch (IOException e) {
