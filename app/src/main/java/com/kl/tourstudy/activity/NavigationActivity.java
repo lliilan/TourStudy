@@ -27,6 +27,8 @@ import com.kl.tourstudy.fargment.NoteFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import c.b.BP;
+
 /**
  * 主界面Activity，包含侧滑和三个主界面滑动
  */
@@ -45,6 +47,9 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        BP.init("9547ff1068535a47e8e78dd30bd6e47e");
+
         setContentView(R.layout.activity_navigation);
         initHeaderView();
         initView();

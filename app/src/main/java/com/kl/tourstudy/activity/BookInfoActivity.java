@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import c.b.BP;
+import c.b.PListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.kl.tourstudy.util.PreferenceUtil.IP;
@@ -204,6 +206,27 @@ public class BookInfoActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_pay:
                     Log.e(TAG, "onClick: pay" );
+//                    BP.pay("游学线路", "2017年5月13日", 0.02, true, new PListener() {
+//                        @Override
+//                        public void orderId(String s) {
+//                            Log.e(TAG, "orderId: s=" + s);
+//                        }
+//
+//                        @Override
+//                        public void succeed() {
+//                            Log.e(TAG, "succeed: succeed" );
+//                        }
+//
+//                        @Override
+//                        public void fail(int i, String s) {
+//                            Log.e(TAG, "fail: fail" );
+//                        }
+//
+//                        @Override
+//                        public void unknow() {
+//                            Log.e(TAG, "unknow: unknow" );
+//                        }
+//                    });
                     break;
                 //点击后显示下单后到出游成功之间的时间信息
 //                case R.id.rl_status:
