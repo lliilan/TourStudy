@@ -1,6 +1,7 @@
 package com.kl.tourstudy.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -22,8 +23,6 @@ import com.google.gson.Gson;
 import com.kl.tourstudy.R;
 import com.kl.tourstudy.gsonbean.BookInfo;
 import com.zhy.http.okhttp.OkHttpUtils;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,28 +46,16 @@ public class BookInfoActivity extends AppCompatActivity {
     private CircleImageView image;
     private List<TextView> list_tv = new ArrayList<>();
     private String phones;
-
-    /**
-     * 对动态权限的判断处理
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    call();
-                    Log.e(TAG, "onRequestPermissionsResult: phone:" + phones );
-                } else {
-                    Toast.makeText(BookInfoActivity.this, "你没有给于授权", Toast.LENGTH_SHORT).show();
-                }
-        }
-    }
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_info);
+
+        //对第三方支付接口进行初始化
+        BP.init("9547ff1068535a47e8e78dd30bd6e47e");
+
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
@@ -112,15 +99,43 @@ public class BookInfoActivity extends AppCompatActivity {
         list_tv.add(tv_phone);
     }
 
-    public class BookInfoTask extends AsyncTask<Integer, Void, BookInfo> implements View.OnClickListener {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    call();
+//                    Log.e(TAG, "onRequestPermissionsResult: phone:" + phones );
+                } else {
+                    Toast.makeText(BookInfoActivity.this, "你没有给于授权", Toast.LENGTH_SHORT).show();
+                }
+        }
+    }
+
+    private void call() {
+        try {
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse("tel:" + phones));
+            startActivity(intent);
+        } catch (SecurityException e){
+            e.printStackTrace();
+        }
+    }
+
+    private class BookInfoTask extends AsyncTask<Integer, Void, BookInfo> implements View.OnClickListener {
 
         private Button btn_pay;
         private CircleImageView image;
         private List<TextView> list_tv = new ArrayList<>();
         private int tourId;
         private String phone;
+        private String tourName;
+        private String payDescript = "游学订单支付";
+        private float payMoney;
+        private Boolean AliPayOrWechat = true;      //默认使用支付宝付款，暂时该第三方支付不支持微信付款
 
-        public BookInfoTask(Button btn_pay, CircleImageView image, List<TextView> list_tv){
+        BookInfoTask(Button btn_pay, CircleImageView image, List<TextView> list_tv){
             this.btn_pay = btn_pay;
             this.image = image;
             this.list_tv = list_tv;
@@ -160,7 +175,7 @@ public class BookInfoActivity extends AppCompatActivity {
                 tv_status.setText("下单成功，等待付款");
             } else if (status == 0){
                 tv_status.setText("订单已取消");
-            } else if (status == 0){
+            } else if (status == 2){
                 tv_status.setText("交易成功");
             }
 
@@ -168,23 +183,23 @@ public class BookInfoActivity extends AppCompatActivity {
 
             btn_call.setOnClickListener(this);
             this.btn_pay.setOnClickListener(this);
-//            RelativeLayout rl = (RelativeLayout) findViewById(R.id.rl_status);
             LinearLayout ll = (LinearLayout) findViewById(R.id.ll_title);
-//            rl.setOnClickListener(this);
             ll.setOnClickListener(this);
 
-            tv_title.setText(bookInfo.getTourName());
-            list_tv.get(2).setText("游学地点:" + bookInfo.getCountry());
-            list_tv.get(3).setText("出发地点:" + bookInfo.getCity());
-            list_tv.get(4).setText("出发时间:" + bookInfo.getGo());
-            list_tv.get(5).setText("出行天数:" + bookInfo.getDay() + "天");
-            list_tv.get(6).setText("订金:" + bookInfo.getDeposit() + "元");
-            list_tv.get(7).setText("总金额:" + bookInfo.getMoney() + "元");
-            list_tv.get(8).setText("负责人:" + bookInfo.getManager() + "  " + bookInfo.getManagerPhone());
-            list_tv.get(9).setText("订单编号:" + bookInfo.getBookId() + "");
-            list_tv.get(10).setText("下单日期:" + bookInfo.getBookDate());
-            list_tv.get(11).setText("订单联系人:" + bookInfo.getUserName());
-            list_tv.get(12).setText("联系方式" + bookInfo.getUserName());
+            tourName = bookInfo.getTourName();
+            payMoney = bookInfo.getDeposit();
+            tv_title.setText(tourName);
+            list_tv.get(2).setText(getString(R.string.tour_place) + bookInfo.getCountry());
+            list_tv.get(3).setText(getString(R.string.go_place) + bookInfo.getCity());
+            list_tv.get(4).setText(getString(R.string.go_date) + bookInfo.getGo());
+            list_tv.get(5).setText(getString(R.string.tour_day) + bookInfo.getDay() + getString(R.string.day));
+            list_tv.get(6).setText(getString(R.string.tour_deposit) + payMoney + getString(R.string.yuan));
+            list_tv.get(7).setText(getString(R.string.tour_money) + bookInfo.getMoney() + getString(R.string.yuan));
+            list_tv.get(8).setText(getString(R.string.tour_manager) + bookInfo.getManager() + "  " + bookInfo.getManagerPhone());
+            list_tv.get(9).setText(getString(R.string.book_id) + bookInfo.getBookId() + "");
+            list_tv.get(10).setText(getString(R.string.book_date) + bookInfo.getBookDate());
+            list_tv.get(11).setText(getString(R.string.book_user) + bookInfo.getUserName());
+            list_tv.get(12).setText(getString(R.string.book_tel) + bookInfo.getUserName());
             tourId = bookInfo.getTourId();
             phone = bookInfo.getManagerPhone();
             setPhones(phone);
@@ -196,7 +211,6 @@ public class BookInfoActivity extends AppCompatActivity {
             switch (v.getId()){
                 //联系负责人按钮
                 case R.id.btn_call:
-//                    Log.e(TAG, "onClick: btn" );
                     if (ContextCompat.checkSelfPermission(BookInfoActivity.this, Manifest.permission.CALL_PHONE)
                              != PackageManager.PERMISSION_GRANTED){
                         ActivityCompat.requestPermissions(BookInfoActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 1);
@@ -205,28 +219,46 @@ public class BookInfoActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.btn_pay:
-                    Log.e(TAG, "onClick: pay" );
-//                    BP.pay("游学线路", "2017年5月13日", 0.02, true, new PListener() {
-//                        @Override
-//                        public void orderId(String s) {
-//                            Log.e(TAG, "orderId: s=" + s);
-//                        }
-//
-//                        @Override
-//                        public void succeed() {
-//                            Log.e(TAG, "succeed: succeed" );
-//                        }
-//
-//                        @Override
-//                        public void fail(int i, String s) {
-//                            Log.e(TAG, "fail: fail" );
-//                        }
-//
-//                        @Override
-//                        public void unknow() {
-//                            Log.e(TAG, "unknow: unknow" );
-//                        }
-//                    });
+                    if (!checkPackageInstalled("com.eg.android.AlipayGphone",
+                        "https://www.alipay.com")){
+                        Toast.makeText(BookInfoActivity.this, "请安装支付宝客户端", Toast.LENGTH_SHORT).show();
+                    } else{
+                        showProgressDialog("正在获取订单...\nSDK版本号:" + BP.getPaySdkVersion());
+                    }
+
+                    Log.e(TAG, "onClick: tourName=" + tourName  + ",payDescript=" + payDescript + ",payMoney=" + payMoney);
+                    BP.pay(tourName, payDescript, payMoney, AliPayOrWechat, new PListener() {
+                        @Override
+                        public void orderId(String s) {
+                            // 此处应该保存订单号,比如保存进数据库等,以便以后查询
+//                            order.setText(orderId);
+//                            tv.append(name + "'s orderid is " + orderId + "\n\n");
+//                            showDialog("获取订单成功!请等待跳转到支付页面~");
+                        }
+
+                        @Override
+                        public void succeed() {
+                            Toast.makeText(BookInfoActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                            hideProgressDialog();
+                        }
+
+                        // 支付失败,原因可能是用户中断支付操作,也可能是网络原因
+                        @Override
+                        public void fail(int code, String reason) {
+                            if (code == -2){
+                                Toast.makeText(BookInfoActivity.this,
+                                        "支付中断,错误代码:" + code + "原因是:" + reason, Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                            hideProgressDialog();
+                        }
+
+                        @Override
+                        public void unknow() {
+                            Toast.makeText(BookInfoActivity.this, "支付结果未知，请稍后手动查询", Toast.LENGTH_SHORT).show();
+                            hideProgressDialog();
+                        }
+                    });
                     break;
                 //点击后显示下单后到出游成功之间的时间信息
 //                case R.id.rl_status:
@@ -235,28 +267,72 @@ public class BookInfoActivity extends AppCompatActivity {
 //                    break;
                 //点击后跳转到游学路线详情
                 case R.id.ll_title:
-                //给Position 可以直接使用，RecyclerItemActivity
+                    //给Position 可以直接使用，RecyclerItemActivity
                     Intent intent = new Intent(BookInfoActivity.this, RecyclerItemActivity.class);
-//                    Log.e(TAG, "onClick: tourId = "+ tourId );
                     intent.putExtra("position", tourId - 1);    //因为得到的是list的值，list从0开始
                     startActivity(intent);
                     break;
             }
         }
 
+        private void hideProgressDialog() {
+            if (progress != null && progress.isShowing())
+                try {
+                    progress.dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }
+
+        private void showProgressDialog(String message) {
+            try {
+                if (progress == null) {
+                    progress = new ProgressDialog(BookInfoActivity.this);
+                    progress.setCancelable(true);
+                }
+                progress.setMessage(message);
+                progress.show();
+            } catch (Exception e) {
+                //在其他线程调用dialog会报错
+            }
+        }
+
+        /**
+         * 检查某包名应用是否已经安装
+         *
+         * @param packageName 包名
+         * @param browserUrl  如果没有应用市场，去官网下载
+         * @return 返回值
+         */
+        private boolean checkPackageInstalled(String packageName, String browserUrl) {
+            try {
+                // 检查是否有支付宝客户端
+                getPackageManager().getPackageInfo(packageName, 0);
+                return true;
+            } catch (PackageManager.NameNotFoundException e) {
+                // 没有安装支付宝，跳转到应用市场
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("market://details?id=" + packageName));
+                    startActivity(intent);
+                } catch (Exception ee) {// 连应用市场都没有，用浏览器去支付宝官网下载
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(browserUrl));
+                        startActivity(intent);
+                    } catch (Exception eee) {
+                        Toast.makeText(BookInfoActivity.this,
+                                "您的手机上没有支付宝，也没有应用市场或者浏览器，请在安装好支付宝后，再进行付款",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            return false;
+        }
+
     }
 
     public void setPhones(String phone){
         this.phones = phone;
-    }
-
-    private void call() {
-        try {
-            Intent intent = new Intent(Intent.ACTION_CALL);
-            intent.setData(Uri.parse("tel:" + phones));
-            startActivity(intent);
-        } catch (SecurityException e){
-            e.printStackTrace();
-        }
     }
 }

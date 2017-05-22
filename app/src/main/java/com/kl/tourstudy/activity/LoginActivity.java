@@ -231,6 +231,7 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
             } else {
                 int message1 = user.getStatus();
                 String message2 = user.getName();
+                String icon = user.getIcon();
 
                 switch (message1) {
                     case 1:
@@ -239,10 +240,12 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
                         editor.putString("name", message2);
                         editor.putString("pwd", user.getPwd());
                         editor.putInt("userId", user.getId());
+                        editor.putString("icon", user.getIcon());
                         editor.putInt("LOG_STATUS", 1);
                         editor.apply();
                         Intent intent = new Intent();
                         intent.putExtra("userName", message2);
+                        intent.putExtra("icon", icon);
                         setResult(RESULT_OK, intent);
                         finish();
                         break;

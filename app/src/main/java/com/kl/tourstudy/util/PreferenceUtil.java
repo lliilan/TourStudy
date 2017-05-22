@@ -10,12 +10,12 @@ import android.content.SharedPreferences;
 
 public class PreferenceUtil {
 
-    public static final String IP = "http://10.128.112.20:8080";
+    public static final String IP = "http://10.100.3.17:8080";
     public static final String PROJECT = "/study_tour/";
     public static final String ERROR = "error";
 
     /**
-     * 是否显示第一次引导界面，true为显示，false，默认不显示
+     * 是否显示第一次引导界面，true为显示，fal1se，默认不显示
      */
     public static final String SHOW_FIRST_SLIDE = "show";
 

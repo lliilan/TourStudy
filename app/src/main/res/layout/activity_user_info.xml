@@ -7,6 +7,7 @@
     tools:context="com.kl.tourstudy.activity.UserInfoActivity">
 
     <android.support.v7.widget.RecyclerView
+        android:background="#ffffff"
         android:id="@+id/recycler_set_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

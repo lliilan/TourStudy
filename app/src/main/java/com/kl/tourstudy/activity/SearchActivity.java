@@ -12,6 +12,9 @@ import com.google.gson.Gson;
 import com.kl.tourstudy.R;
 import com.kl.tourstudy.gsonbean.TourInfo;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import static com.kl.tourstudy.util.PreferenceUtil.ERROR;
 import static com.kl.tourstudy.util.PreferenceUtil.IP;
@@ -20,6 +23,7 @@ import static com.kl.tourstudy.util.PreferenceUtil.PROJECT;
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "SearchActivity";
+    private TagFlowLayout tfl;
     private EditText et_search;
     private Button btn_search;
 
@@ -31,23 +35,24 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initView() {
-        et_search = (EditText) findViewById(R.id.et_search);
-        btn_search = (Button) findViewById(R.id.btn_search);
-        btn_search.setOnClickListener(this);
+        tfl = (TagFlowLayout) findViewById(R.id.tfl);
+//        et_search = (EditText) findViewById(R.id.et_search);
+//        btn_search = (Button) findViewById(R.id.btn_search);
+//        btn_search.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_search:
-                String text = et_search.getText().toString();
-                if (text.equals("")){
-                    Toast.makeText(SearchActivity.this, "请输入搜索内容", Toast.LENGTH_SHORT).show();
-                } else {
-                    SearchTask task = new SearchTask();
-                    task.execute(text);
-                }
-                break;
+//            case R.id.btn_search:
+//                String text = et_search.getText().toString();
+//                if (text.equals("")){
+//                    Toast.makeText(SearchActivity.this, "请输入搜索内容", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    SearchTask task = new SearchTask();
+//                    task.execute(text);
+//                }
+//                break;
             default:
                 break;
         }

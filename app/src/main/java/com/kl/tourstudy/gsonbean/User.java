@@ -14,6 +14,7 @@ public class User {
     private String city;
     private int status;
     private String regDate;
+    private String icon;
 
     public int getId() {
         return id;
@@ -85,5 +86,13 @@ public class User {
 
     public void setRegDate(String regDate) {
         this.regDate = regDate;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

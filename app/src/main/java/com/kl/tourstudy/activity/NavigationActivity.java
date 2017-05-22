@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,8 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.kl.tourstudy.R;
 import com.kl.tourstudy.adapter.SectionsPagerAdapter;
 import com.kl.tourstudy.fargment.HomeFragment;
@@ -27,7 +28,10 @@ import com.kl.tourstudy.fargment.NoteFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import c.b.BP;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.kl.tourstudy.util.PreferenceUtil.IP;
+import static com.kl.tourstudy.util.PreferenceUtil.PROJECT;
 
 /**
  * 主界面Activity，包含侧滑和三个主界面滑动
@@ -35,11 +39,14 @@ import c.b.BP;
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = "NavigationActivity";
+
     private DrawerLayout drawer;        //包含侧滑栏的一个Layout
     private NavigationView navigationView;  //侧滑栏
 
     private Toolbar toolbar;
     private TextView mUserName;     //侧滑栏头部用户名TextView
+    private CircleImageView mIcon;  //侧滑栏头部用户头像
 
     //保存Fragment标题
     private String[] title = {"推荐路线","朋友圈","聊天"};
@@ -47,8 +54,6 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        BP.init("9547ff1068535a47e8e78dd30bd6e47e");
 
         setContentView(R.layout.activity_navigation);
         initHeaderView();
@@ -65,6 +70,34 @@ public class NavigationActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences firstPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
+        int status = firstPreferences.getInt("LOG_STATUS", 0);
+        if (status == 1) {
+            Log.e(TAG, "onStart: 调用了onStart");
+            String userIcon = IP + PROJECT + firstPreferences.getString("icon", IP + PROJECT + "user_icon_default.jpg");
+            Glide.with(NavigationActivity.this).load(userIcon).into(mIcon);
+            Glide.with(NavigationActivity.this).load(R.drawable.first1).into(mIcon);
+            mIcon.setImageResource(R.drawable.first1);
+            mUserName.setText(firstPreferences.getString("name", "请登录"));
+        }
+    }
+//
+//        @Override
+//    protected void onResume() {
+//        super.onResume();
+//        SharedPreferences firstPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
+//        int status = firstPreferences.getInt("LOG_STATUS", 0);
+//        if (status == 1) {
+//            Log.e(TAG, "onResume: 调用了onResume");
+//            String userIcon = IP + PROJECT + firstPreferences.getString("icon", IP + PROJECT + "user_icon_default.jpg");
+//            Glide.with(NavigationActivity.this).load(userIcon).into(mIcon);
+//            mUserName.setText(firstPreferences.getString("name", "请登录"));
+//        }
+//    }
+
     /**
      * 初始化以及获取侧滑栏头部View
      */
@@ -72,9 +105,7 @@ public class NavigationActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         mUserName = (TextView) headerView.findViewById(R.id.tv_user_name);
-
-        SharedPreferences preferences = getSharedPreferences("user_info",MODE_PRIVATE);
-        mUserName.setText(preferences.getString("name","请登录"));
+        mIcon = (CircleImageView) headerView.findViewById(R.id.imageView);
     }
 
     private void initView() {
@@ -97,7 +128,6 @@ public class NavigationActivity extends AppCompatActivity
       如果应用内存占用过多，可以考虑替换成android.support.v4.app.FragmentStatePagerAdapter
      */
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), mFragmentList, title);
-        //为viewPager设置适配器
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -149,11 +179,14 @@ public class NavigationActivity extends AppCompatActivity
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK){
-            String name = data.getStringExtra("userName");
-            Toast.makeText(NavigationActivity.this, "登录成功," + name, Toast.LENGTH_SHORT).show();
-            mUserName.setText(name);
-        }
+//        if (resultCode == RESULT_OK){
+//            String name = data.getStringExtra("userName");
+//            String icon = data.getStringExtra("icon");
+//            Log.e(TAG, "onActivityResult: 地址：" + IP + icon );
+//            Toast.makeText(NavigationActivity.this, "登录成功," + name, Toast.LENGTH_SHORT).show();
+//            mUserName.setText(name);
+//            Glide.with(NavigationActivity.this).load(IP + PROJECT + icon).into(mIcon);
+//        }
     }
 
     /**
@@ -168,14 +201,14 @@ public class NavigationActivity extends AppCompatActivity
             case R.id.nav_user:
                 SharedPreferences preferences = getSharedPreferences("user_info", MODE_PRIVATE);
                 int status = preferences.getInt("LOG_STATUS", 0);
-                //根据用户的登录状态值判断是跳转到登录界面，还是跳转到个人信息界面
-//                if (status == 0){
-//                    Intent intent = new Intent(NavigationActivity.this, LoginActivity.class);
-//                    startActivityForResult(intent, 1);
-//                } else if (status == 1){
+//                根据用户的登录状态值判断是跳转到登录界面，还是跳转到个人信息界面
+                if (status == 0){
+                    Intent intent = new Intent(NavigationActivity.this, LoginActivity.class);
+                    startActivityForResult(intent, 1);
+                } else if (status == 1){
                     Intent intent = new Intent(NavigationActivity.this, UserInfoActivity.class);
                     startActivity(intent);
-//                }
+                }
                 break;
             case R.id.nav_setting:
                 Intent intent2 = new Intent(NavigationActivity.this, NoteSettingsActivity.class);

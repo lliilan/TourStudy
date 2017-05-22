@@ -62,6 +62,12 @@ public class RecyclerItemActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.item_button1:

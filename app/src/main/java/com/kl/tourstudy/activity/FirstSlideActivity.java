@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import c.b.BP;
+
 /**
  * 第一次引导页
  * Created by KL on 2017/3/21 0021.
@@ -31,7 +33,6 @@ import java.util.List;
     public class FirstSlideActivity extends AppCompatActivity implements View.OnClickListener,ViewPager.OnPageChangeListener{
 
         private ViewPager viewPager;
-        private List<View> viewList;                //储存ViewPager中要使用到的View的集合
         private GestureDetector gestureDetector;    //手势监听类，监听滑动动作
 
         //引导图片资源
@@ -68,7 +69,7 @@ import java.util.List;
         if (isShow){
             IntentMain();
         }else{
-            viewList = new ArrayList<>();
+            List<View> viewList = new ArrayList<>();
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT);
             //给引导页面加载图片
