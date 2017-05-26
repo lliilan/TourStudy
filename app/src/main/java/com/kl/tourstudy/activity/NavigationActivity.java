@@ -76,7 +76,7 @@ public class NavigationActivity extends AppCompatActivity
         SharedPreferences firstPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
         int status = firstPreferences.getInt("LOG_STATUS", 0);
         if (status == 1) {
-            Log.e(TAG, "onStart: 调用了onStart");
+//            Log.e(TAG, "onStart: 调用了onStart");
             String userIcon = IP + PROJECT + firstPreferences.getString("icon", IP + PROJECT + "user_icon_default.jpg");
             Glide.with(NavigationActivity.this).load(userIcon).into(mIcon);
             Glide.with(NavigationActivity.this).load(R.drawable.first1).into(mIcon);
@@ -84,19 +84,6 @@ public class NavigationActivity extends AppCompatActivity
             mUserName.setText(firstPreferences.getString("name", "请登录"));
         }
     }
-//
-//        @Override
-//    protected void onResume() {
-//        super.onResume();
-//        SharedPreferences firstPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
-//        int status = firstPreferences.getInt("LOG_STATUS", 0);
-//        if (status == 1) {
-//            Log.e(TAG, "onResume: 调用了onResume");
-//            String userIcon = IP + PROJECT + firstPreferences.getString("icon", IP + PROJECT + "user_icon_default.jpg");
-//            Glide.with(NavigationActivity.this).load(userIcon).into(mIcon);
-//            mUserName.setText(firstPreferences.getString("name", "请登录"));
-//        }
-//    }
 
     /**
      * 初始化以及获取侧滑栏头部View

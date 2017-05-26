@@ -1,7 +1,5 @@
 package com.kl.tourstudy.gsonbean;
 
-import java.util.Date;
-
 /**
  * 订单信息--用于将服务器返回的json数据用GSON解析
  * Created by KL on 2017/5/8 0008.
@@ -12,6 +10,7 @@ public class BookInfo {
     private int tourId;
     private int bookId;
     private String userName;
+    private String userPhone;
     private String bookDate;
     private String tourName;
     private String country;
@@ -49,6 +48,14 @@ public class BookInfo {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
     }
 
     public String getBookDate() {

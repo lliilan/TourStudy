@@ -110,10 +110,9 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_book_info">订单</string>
-    <string name="book_status">订单状态</string>
+    <string name="book_status">游学详情</string>
     <string name="book_tour_info">出行信息</string>
     <string name="book_info">订单信息</string>
-    <string name="pay_now">立即付款</string>
     <string name="tour_place">游学地点:</string>
     <string name="go_place">出发地点:</string>
     <string name="go_date">出发时间:</string>
@@ -127,5 +126,12 @@
     <string name="book_tel">联系方式</string>
     <string name="day">天</string>
     <string name="yuan">元</string>
+    <string name="book_sure">确认下单</string>
+    <string name="pay_all">支付全款</string>
+    <string name="go_book">去预定</string>
+    <string name="query_question">查看问题</string>
+    <string name="pay_now">立即付款</string>
+    <string name="pay_time">支付时间:</string>
+    <string name="pay_not">未支付</string>
 
 </resources>

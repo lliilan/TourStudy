@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kl.tourstudy.R;
+import com.kl.tourstudy.activity.ABookActivity;
 import com.kl.tourstudy.activity.ChooseIconActivity;
+import com.kl.tourstudy.activity.ListBookActivity;
 import com.kl.tourstudy.activity.NavigationActivity;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -68,7 +71,9 @@ public class UserInfoSettingAdapter extends RecyclerView.Adapter<UserInfoSetting
             });
         }
 
-        private void bookManage(Context context) {
+        private void bookManage(final Context context) {
+            Intent intent = new Intent(context, ListBookActivity.class);
+            context.startActivity(intent);
         }
 
         private void findUserInfo(Context context) {
@@ -130,6 +135,5 @@ public class UserInfoSettingAdapter extends RecyclerView.Adapter<UserInfoSetting
     public int getItemCount() {
         return setting.length;
     }
-
 
 }

@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 
 public class PreferenceUtil {
 
-    public static final String IP = "http://10.100.3.17:8080";
+    public static final String IP = "http://10.128.194.250:8080";
     public static final String PROJECT = "/study_tour/";
     public static final String ERROR = "error";
 

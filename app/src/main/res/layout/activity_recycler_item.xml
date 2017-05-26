@@ -14,7 +14,7 @@
 
     <Button
         android:layout_alignParentBottom="true"
-        android:text="预定"
+        android:text="@string/go_book"
         android:background="@color/colorPrimary"
         android:id="@+id/item_button1"
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
 
     <Button
         android:background="@color/colorPrimary"
-        android:text="查看问题"
+        android:text="@string/query_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/item_button1"

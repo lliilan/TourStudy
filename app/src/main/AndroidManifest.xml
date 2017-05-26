@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kl.tourstudy">
 
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -52,6 +52,8 @@
             android:label="@string/title_activity_book_info" />
         <activity android:name="cn.bmob.pay.v3.act.PayAct" />
         <activity android:name=".activity.ChooseIconActivity" />
+        <activity android:name=".activity.ABookActivity" />
+        <activity android:name=".activity.ListBookActivity"></activity>
     </application>
 
 </manifest>

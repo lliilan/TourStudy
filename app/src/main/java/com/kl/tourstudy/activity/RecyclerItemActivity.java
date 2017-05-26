@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.kl.tourstudy.R;
 import com.kl.tourstudy.adapter.TourInfoAdapter;
+import com.kl.tourstudy.gsonbean.BookInfo;
 import com.kl.tourstudy.gsonbean.TourInfo;
 import com.zhy.http.okhttp.OkHttpUtils;
 
@@ -76,11 +77,10 @@ public class RecyclerItemActivity extends AppCompatActivity implements View.OnCl
                     Toast.makeText(RecyclerItemActivity.this, "请在登录后进行预定", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(RecyclerItemActivity.this, LoginActivity.class));
                 } else {
-                    Intent intent2 = new Intent(RecyclerItemActivity.this, TourBookActivity.class);
+                    Intent intent2 = new Intent(RecyclerItemActivity.this, BookInfoActivity.class);
                     intent2.putExtra("tourId",getIntent().getIntExtra("position", 0));
                     intent2.putExtra("userId",preferences.getInt("userId", 0));        //获取登录成功的用户的ID
                     startActivity(intent2);
-                    finish();
                 }
                 break;
             case R.id.button_question:
