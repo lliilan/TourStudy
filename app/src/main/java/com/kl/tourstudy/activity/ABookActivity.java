@@ -334,7 +334,6 @@ public class ABookActivity extends AppCompatActivity {
                                         .url(url)
                                         .build()
                                         .execute().body().string();
-//                                Log.e(TAG, "orderId: " + info );
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
