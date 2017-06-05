@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -53,7 +54,18 @@
         <activity android:name="cn.bmob.pay.v3.act.PayAct" />
         <activity android:name=".activity.ChooseIconActivity" />
         <activity android:name=".activity.ABookActivity" />
-        <activity android:name=".activity.ListBookActivity"></activity>
+        <activity android:name=".activity.ListBookActivity" />
+        <activity
+            android:name=".activity.NoteSubmitActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.AlbumActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.ImageFile"></activity>
+        <activity android:name=".activity.ShowAllPhoto"></activity>
+        <activity android:name=".activity.GalleryActivity"></activity>
+        <activity android:name=".activity.NoteListActivity"></activity>
+        <activity android:name=".activity.ChatActivity"></activity>
     </application>
 
 </manifest>

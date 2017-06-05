@@ -29,7 +29,7 @@ public class AskQuestionActivity extends AppCompatActivity implements View.OnCli
     String url,question_title,question_info;
     private ImageView back;
 
-    private int tour_id;
+    private int tour_id=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +45,8 @@ public class AskQuestionActivity extends AppCompatActivity implements View.OnCli
         submit.setOnClickListener(this);
 //        back= (ImageView) findViewById(R.id.back);
 //        back.setOnTouchListener(this);
-        Intent intent=getIntent();
-        tour_id=intent.getIntExtra("tour_id",0);
+//        Intent intent=getIntent();
+//        tour_id=intent.getIntExtra("tour_id",0);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class AskQuestionActivity extends AppCompatActivity implements View.OnCli
                 e.printStackTrace();
             }
             url= IP + PROJECT +"QuestionServlet?action=insert&question_title="+question_title+"&question_info="+question_info+"&tour_id=1"+"&question_user_id=1";
-            HttpUtil.sendHttpRequest(url, new HttpCallbackListener() {
+            HttpUtil.sendHttpRequestTest(url, new HttpCallbackListener() {
                 @Override
                 public void onFinish(String response) {
                     Log.e("传回来的数据是：",response.toString());

@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -24,11 +23,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.kl.tourstudy.R;
 import com.kl.tourstudy.adapter.AnswerAdapter;
 import com.kl.tourstudy.table.Answer;
-import com.kl.tourstudy.util.Constant;
 import com.kl.tourstudy.util.DateUtil;
 import com.kl.tourstudy.util.HttpCallbackListener;
 import com.kl.tourstudy.util.HttpUtil;
@@ -164,7 +161,7 @@ public class QuestionInfoActivity extends AppCompatActivity implements View.OnCl
      */
     public void getData(){
         showProgressDialog();
-        HttpUtil.sendHttpRequest(IP + PROJECT + "AnswerServlet?action=firstSelectAnswer&question_id=" + question_id+"&currPage="+currPage+"&user_id=1", new HttpCallbackListener() {
+        HttpUtil.sendHttpRequestTest(IP + PROJECT + "AnswerServlet?action=firstSelectAnswer&question_id=" + question_id+"&currPage="+currPage+"&user_id=1", new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
                 try {
@@ -182,13 +179,13 @@ public class QuestionInfoActivity extends AppCompatActivity implements View.OnCl
                         int support_count=item.getInt("support_count");
                         int showState=item.getInt("showState");
                         int answer_id=item.getInt("answer_id");
-                        int user_img=R.mipmap.icon;//用户头像
+                        int user_img= R.mipmap.icon;//用户头像
                         String answer_user_name=name;//用户昵称
                         Answer answer=null;
                         if(showState==0){
-                            answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img,R.drawable.dot2,showState,answer_user_name);
+                            answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img, R.drawable.preview_unlike_icon_highlighted,showState,answer_user_name);
                         }else{
-                            answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img ,R.drawable.dot1,showState,answer_user_name);
+                            answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img , R.drawable.preview_like_icon_highlighted,showState,answer_user_name);
                         }
                         answers.add(answer);
                     }
@@ -206,7 +203,7 @@ public class QuestionInfoActivity extends AppCompatActivity implements View.OnCl
                             answerList.addFooterView(loadMoreView);
                             loadMoreButton= (Button) loadMoreView.findViewById(R.id.loadmore_button);
                             loadMoreButton.setOnClickListener(QuestionInfoActivity.this);
-                            answerAdapter=new AnswerAdapter(QuestionInfoActivity.this,R.layout.answer_item,answers);
+                            answerAdapter=new AnswerAdapter(QuestionInfoActivity.this, R.layout.answer_item,answers);
                             answerList.setAdapter(answerAdapter);
                             answerList.setOnItemClickListener(QuestionInfoActivity.this);
                             answerList.setOnScrollListener(QuestionInfoActivity.this);
@@ -235,7 +232,7 @@ public class QuestionInfoActivity extends AppCompatActivity implements View.OnCl
         public void onRefresh() {
             currPage=1;
             answers.clear();
-            HttpUtil.sendHttpRequest(IP + PROJECT + "AnswerServlet?action=selectAll&question_id=" + question_id+"&&currPage="+currPage+"&user_id=1", new HttpCallbackListener() {
+            HttpUtil.sendHttpRequestTest(IP + PROJECT + "AnswerServlet?action=selectAll&question_id=" + question_id+"&&currPage="+currPage+"&user_id=1", new HttpCallbackListener() {
                 @Override
                 public void onFinish(String response) {
                     try {
@@ -253,13 +250,13 @@ public class QuestionInfoActivity extends AppCompatActivity implements View.OnCl
                             int support_count=item.getInt("support_count");
                             int showState=item.getInt("showState");
                             int answer_id=item.getInt("answer_id");
-                            int user_img=R.mipmap.icon  ;//用户头像
+                            int user_img= R.mipmap.icon  ;//用户头像
                             String answer_user_name=name ;//用户昵称
                             Answer answer=null;
                             if(showState==0){
-                                answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img,R.drawable.dot2,showState,answer_user_name);
+                                answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img, R.drawable.preview_unlike_icon_highlighted,showState,answer_user_name);
                             }else{
-                                answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img ,R.drawable.dot1,showState,answer_user_name);
+                                answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img , R.drawable.preview_like_icon_highlighted,showState,answer_user_name);
                             }
                             answers.add(answer);
                         }
@@ -281,7 +278,7 @@ public class QuestionInfoActivity extends AppCompatActivity implements View.OnCl
                                     answerList.addFooterView(loadMoreView);
                                     loadMoreButton= (Button) loadMoreView.findViewById(R.id.loadmore_button);
                                     loadMoreButton.setOnClickListener(QuestionInfoActivity.this);
-                                    answerAdapter=new AnswerAdapter(QuestionInfoActivity.this,R.layout.answer_item,answers);
+                                    answerAdapter=new AnswerAdapter(QuestionInfoActivity.this, R.layout.answer_item,answers);
                                     answerList.setAdapter(answerAdapter);
                                     answerList.setOnItemClickListener(QuestionInfoActivity.this);
                                     answerList.setOnScrollListener(QuestionInfoActivity.this);
@@ -331,7 +328,7 @@ public class QuestionInfoActivity extends AppCompatActivity implements View.OnCl
                     }
                     answer_info.clearFocus();
                     url=IP + PROJECT + "AnswerServlet?action=insert&answer_info="+submitInfo+"&question_id="+question_id+"&user_id=1";
-                    HttpUtil.sendHttpRequest(url,new HttpCallbackListener(){
+                    HttpUtil.sendHttpRequestTest(url,new HttpCallbackListener(){
                         @Override
                         public void onFinish(String response) {
                             if(response.equals("success")){
@@ -387,7 +384,7 @@ public class QuestionInfoActivity extends AppCompatActivity implements View.OnCl
      */
     private void loadMoreData(){
         currPage++;
-        HttpUtil.sendHttpRequest(IP + PROJECT +  "AnswerServlet?action=selectAll&question_id=" + question_id+"&&currPage="+currPage+"&user_id=1", new HttpCallbackListener() {
+        HttpUtil.sendHttpRequestTest(IP + PROJECT +  "AnswerServlet?action=selectAll&question_id=" + question_id+"&&currPage="+currPage+"&user_id=1", new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
                 try {
@@ -405,13 +402,13 @@ public class QuestionInfoActivity extends AppCompatActivity implements View.OnCl
                         int support_count=item.getInt("support_count");
                         int showState=item.getInt("showState");
                         int answer_id=item.getInt("answer_id");
-                        int user_img=R.mipmap.icon  ;//用户头像
+                        int user_img= R.mipmap.icon  ;//用户头像
                         String answer_user_name=name ;//用户昵称
                         Answer answer=null;
                         if(showState==0){
-                            answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img,R.drawable.dot2,showState,answer_user_name);
+                            answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img, R.drawable.preview_unlike_icon_highlighted,showState,answer_user_name);
                         }else{
-                            answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img ,R.drawable.dot1,showState,answer_user_name);
+                            answer=new Answer(answer_id,answer_date,answer_info,support_count,user_img , R.drawable.preview_like_icon_highlighted,showState,answer_user_name);
                         }
                         answers.add(answer);
                     }
@@ -506,7 +503,7 @@ public class QuestionInfoActivity extends AppCompatActivity implements View.OnCl
 //                    answer_support.setTextColor(Color.GRAY);
 //                    answers.get(position).setShowState(0);
 //                }
-                HttpUtil.sendHttpRequest(url, new HttpCallbackListener() {
+                HttpUtil.sendHttpRequestTest(url, new HttpCallbackListener() {
                     @Override
                     public void onFinish(final String response) {
 
@@ -515,14 +512,14 @@ public class QuestionInfoActivity extends AppCompatActivity implements View.OnCl
                             public void run() {
                                 if (response.equals("red")){
                                     Log.e("红","红");
-                                    support.setBackgroundResource(R.drawable.dot1);
+                                    support.setBackgroundResource(R.drawable.preview_like_icon_highlighted);
                                     support_count=support_count+1;
                                     answer_support.setText(String.valueOf(support_count));
                                     answer_support.setTextColor(Color.RED);
                                 }
                                 if (response.equals("gray")){
                                     Log.e("灰","灰");
-                                    support.setBackgroundResource(R.drawable.dot2);
+                                    support.setBackgroundResource(R.drawable.preview_unlike_icon_highlighted);
                                     support_count=support_count-1;
                                     answer_support.setText(String.valueOf(support_count));
                                     answer_support.setTextColor(Color.GRAY);

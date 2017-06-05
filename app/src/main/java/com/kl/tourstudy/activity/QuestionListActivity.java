@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.kl.tourstudy.R;
 import com.kl.tourstudy.adapter.QuestionAdapter;
 import com.kl.tourstudy.table.Question;
-import com.kl.tourstudy.util.Constant;
 import com.kl.tourstudy.util.DateUtil;
 import com.kl.tourstudy.util.HttpCallbackListener;
 import com.kl.tourstudy.util.HttpUtil;
@@ -64,12 +63,11 @@ public class QuestionListActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.questionlist_layout);
-
         initValue();
         askQuestion= (Button) findViewById(R.id.ask_question_button);
         askQuestion.setOnClickListener(this);
-        Intent intent=getIntent();   //获取tour_id
-        tour_id=intent.getIntExtra("tour_id",1);
+//        Intent intent=getIntent();   //获取tour_id
+//        tour_id=intent.getIntExtra("tour_id",1);
 
         swipeRefreshLayout= (SwipeRefreshLayout) findViewById(R.id.refresh_question);
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light);
@@ -78,7 +76,7 @@ public class QuestionListActivity extends AppCompatActivity implements View.OnCl
             public void onRefresh() {
                 currPage=1;
                 questions.clear();
-                HttpUtil.sendHttpRequest(IP + PROJECT + "QuestionServlet?action=selectAll&currPage="+currPage+"&tour_id="+tour_id, new HttpCallbackListener() {
+                HttpUtil.sendHttpRequestTest(IP + PROJECT + "QuestionServlet?action=selectAll&currPage="+currPage+"&tour_id="+tour_id, new HttpCallbackListener() {
                     @Override
                     public void onFinish(String response) {
                         try {
@@ -97,7 +95,7 @@ public class QuestionListActivity extends AppCompatActivity implements View.OnCl
                                 int answer_count=item.getInt("answer_count");
                                 int visit_count=item.getInt("visit_count");
                                 int question_id=item.getInt("question_id");
-                                int user_img=R.mipmap.icon ;//用户头像
+                                int user_img= R.mipmap.icon ;//用户头像
                                 String user_name=name ;//用户昵称
                                 Question question=new Question(question_id,visit_count,answer_count,question_title,question_info,question_date,user_img,user_name);
                                 questions.add(question);
@@ -116,7 +114,7 @@ public class QuestionListActivity extends AppCompatActivity implements View.OnCl
                                         questionList.addFooterView(loadMoreView);
                                         loadMoreButton= (Button) loadMoreView.findViewById(R.id.loadmore_button);
                                         loadMoreButton.setOnClickListener(QuestionListActivity.this);
-                                        questionAdapter=new QuestionAdapter(QuestionListActivity.this,R.layout.question_item,questions);
+                                        questionAdapter=new QuestionAdapter(QuestionListActivity.this, R.layout.question_item,questions);
                                         questionList.setAdapter(questionAdapter);
                                         questionList.setOnItemClickListener(QuestionListActivity.this);
                                     }else {
@@ -150,7 +148,7 @@ public class QuestionListActivity extends AppCompatActivity implements View.OnCl
 
     public void getData(){
 //        UI.showProgressDialog(QuestionListActivity.this);
-        HttpUtil.sendHttpRequest(IP + PROJECT + "QuestionServlet?action=selectAll&currPage="+currPage+"&tour_id="+tour_id, new HttpCallbackListener() {
+        HttpUtil.sendHttpRequestTest(IP + PROJECT + "QuestionServlet?action=selectAll&currPage="+currPage+"&tour_id="+tour_id, new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
                 try {
@@ -258,7 +256,7 @@ public class QuestionListActivity extends AppCompatActivity implements View.OnCl
      */
     private void loadMoreData(){
         currPage++;
-        HttpUtil.sendHttpRequest(IP + PROJECT + "QuestionServlet?action=selectAll&currPage="+currPage+"&tour_id="+tour_id, new HttpCallbackListener() {
+        HttpUtil.sendHttpRequestTest(IP + PROJECT + "QuestionServlet?action=selectAll&currPage="+currPage+"&tour_id="+tour_id, new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
                 try {

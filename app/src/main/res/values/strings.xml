@@ -133,5 +133,7 @@
     <string name="pay_now">立即付款</string>
     <string name="pay_time">支付时间:</string>
     <string name="pay_not">未支付</string>
+    <string name="text_login">注册</string>
+    <string name="send">发送</string>
 
 </resources>

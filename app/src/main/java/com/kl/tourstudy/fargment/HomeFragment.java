@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
         getTourSum();
     }
 
-    public int getTourSum() {
+    public void getTourSum() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -68,6 +68,6 @@ public class HomeFragment extends Fragment {
             }
         });
         thread.start();
-        return 0;
+//        return 0;
     }
 }

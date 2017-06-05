@@ -155,7 +155,7 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.ViewHolder> {
 
                 tourTitle.setText(name);
                 Glide.with(mContext).load(image).into(tourImage);
-                Log.e(TAG, "onPostExecute: " + image );
+//                Log.e(TAG, "onPostExecute: " + image );
                 tourPrice.setText(stylePrice);
                 tourDate.setText("截至报名日期:" + date);
                 tourDay.setText(styleDay);

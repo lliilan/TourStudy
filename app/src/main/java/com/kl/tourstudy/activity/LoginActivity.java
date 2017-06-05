@@ -235,7 +235,6 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
 
                 switch (message1) {
                     case 1:
-                        //将用户名密码储存到SharedPreferences中
                         SharedPreferences.Editor editor = getSharedPreferences("user_info", MODE_PRIVATE).edit();
                         editor.putString("name", message2);
                         editor.putString("pwd", user.getPwd());
@@ -247,6 +246,20 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
                         intent.putExtra("userName", message2);
                         intent.putExtra("icon", icon);
                         setResult(RESULT_OK, intent);
+                        finish();
+                        break;
+                    case 3:
+                        SharedPreferences.Editor editor2 = getSharedPreferences("user_info", MODE_PRIVATE).edit();
+                        editor2.putString("name", message2);
+                        editor2.putString("pwd", user.getPwd());
+                        editor2.putInt("userId", user.getId());
+                        editor2.putString("icon", user.getIcon());
+                        editor2.putInt("LOG_STATUS", 3);
+                        editor2.apply();
+                        Intent intent2 = new Intent();
+                        intent2.putExtra("userName", message2);
+                        intent2.putExtra("icon", icon);
+                        setResult(RESULT_OK, intent2);
                         finish();
                         break;
                     case 2:
